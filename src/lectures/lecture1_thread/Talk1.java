@@ -1,4 +1,4 @@
-package lectures.lecture1;
+package lectures.lecture1_thread;
 
 public class Talk1 {
 	public static void main(String[] args)
