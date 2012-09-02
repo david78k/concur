@@ -16,14 +16,14 @@ public class FactorizerServlet {
 		encodeIntoRes(resp,factors);
 	}
 
-	private void encodeIntoRes(Object resp, BigInteger[] factors) {
+	public void encodeIntoRes(Object resp, BigInteger[] factors) {
 	}
 
-	private BigInteger[] factor(BigInteger i) {
+	public BigInteger[] factor(BigInteger i) {
 		return null;
 	}
 
-	private BigInteger extractFromReq(Object req) {
+	public BigInteger extractFromReq(Object req) {
 		return null;
 	}
 
