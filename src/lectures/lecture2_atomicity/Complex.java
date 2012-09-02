@@ -13,7 +13,7 @@ public class Complex {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Complex c = new Complex(4, 5);
-		Complex d = new Complex(6, 7);
+		Complex d = new Complex(1, 2);
 		c = c.add(d);
 	}
 
