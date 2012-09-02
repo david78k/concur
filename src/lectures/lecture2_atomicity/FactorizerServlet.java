@@ -13,10 +13,10 @@ public class FactorizerServlet {
 	public void service (Object req, Object resp) {  
 		BigInteger i = extractFromReq(req);
 		BigInteger [] factors = factor(i);
-		encodeIntoRes(resp,factors);
+		encodeIntoResp(resp,factors);
 	}
 
-	public void encodeIntoRes(Object resp, BigInteger[] factors) {
+	public void encodeIntoResp(Object resp, BigInteger[] factors) {
 	}
 
 	public BigInteger[] factor(BigInteger i) {

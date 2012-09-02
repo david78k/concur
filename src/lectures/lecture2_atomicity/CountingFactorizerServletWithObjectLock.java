@@ -18,6 +18,6 @@ public class CountingFactorizerServletWithObjectLock extends FactorizerServlet {
 		synchronized (lock) {
 			count ++;
 		}
-		encodeIntoRes(resp,factors);
+		encodeIntoResp(resp,factors);
 	}
 }

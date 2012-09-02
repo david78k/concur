@@ -21,6 +21,6 @@ public class CountingFactorizerServletWithReentrantLock extends FactorizerServle
 		BigInteger i = extractFromReq(req);
 		BigInteger [] factors = factor(i);
 		count ++;
-		encodeIntoRes(resp,factors);
+		encodeIntoResp(resp,factors);
 	}
 }
