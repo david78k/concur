@@ -1,18 +1,23 @@
-package lectures.lecture2_atomicity;
+package lectures.lecture3_atomicity;
 
 import java.math.BigInteger;
 
-public class CountingFactorizerServlet extends FactorizerServlet {
+public class CountingFactorizerServletWithObjectLock extends FactorizerServlet {
 	private long count = 0;
+	private final static Object lock = new Object();
 	
 	public long getCount() {
-		return count;
+		synchronized (lock) {
+			return count;
+		}
 	}
 
 	public void service (Object req, Object resp) {  
 		BigInteger i = extractFromReq(req);
 		BigInteger [] factors = factor(i);
-		count ++;
+		synchronized (lock) {
+			count ++;
+		}
 		encodeIntoResp(resp,factors);
 	}
 }

@@ -1,10 +1,10 @@
-package lectures.lecture1_thread;
+package lectures.lecture2_thread;
 
-public class Stutterer implements Runnable {
+public class StuttererThread extends Thread {
 	static final int ITERS = 100;
 	private String m;
 
-	public Stutterer(String m)
+	public StuttererThread(String m)
 	{  
 		this.m = m;  
 	}

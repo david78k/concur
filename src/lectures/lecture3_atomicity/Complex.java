@@ -1,4 +1,4 @@
-package lectures.lecture2_atomicity;
+package lectures.lecture3_atomicity;
 
 /*
  * immutable object
