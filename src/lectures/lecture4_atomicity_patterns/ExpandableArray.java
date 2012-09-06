@@ -3,7 +3,7 @@ package lectures.lecture4_atomicity_patterns;
 import java.util.NoSuchElementException;
 
 //@ThreadSafe
-public class ExpandableArray {
+class ExpandableArray {
 
 //	@GuardedBy(this)
 	protected Object[] data;	// the elements
