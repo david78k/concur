@@ -12,20 +12,35 @@ public class HappensBefore {
 	int x, y;
 	
 	public static void main(String[] args) {
-		HappensBefore hb = new HappensBefore();
 		
-		hb.start();
-		hb.startVolatiles();
+		int iter = 15;
+		for (int i = 0; i < iter ; i++) {
+			HappensBefore hb = new HappensBefore();
+			hb.start();
+			
+			hb = new HappensBefore();
+			hb.startVolatiles();
+			
+			System.out.println();
+		}
+	}
+	
+	void init() {
+		x = 0; y = 0;
+		a = 0; b = 0;
+		va = 0; vb = 0;
 	}
 
 	void start() {
+		init();
 		try {
 			// Thread 0
 			Thread t0 = new Thread(new Runnable0());
-			t0.start();
 			
 			// Thread 1 
 			Thread t1 = new Thread(new Runnable1());
+			
+			t0.start();
 			t1.start();
 			
 			t0.join();
@@ -39,13 +54,16 @@ public class HappensBefore {
 	}
 	
 	void startVolatiles() {
+		init();
+		
 		try {
 			// Thread 0
 			Thread t0 = new Thread(new Volatile0());
-			t0.start();
 			
 			// Thread 1 
 			Thread t1 = new Thread(new Volatile1());
+			
+			t0.start();
 			t1.start();
 			
 			t0.join();
@@ -60,38 +78,45 @@ public class HappensBefore {
 
 	class Runnable0 implements Runnable {
 		public void run() {
-//			System.out.println("Thread0");
-			
 			a = 1;
+//			sleep(1);
 			x = b;
 		}
 	}
 	
 	class Runnable1 implements Runnable {
 		public void run() {
-//			System.out.println("Thread1");
-			
 			b = 1;
+//			sleep(1);
 			y = a;
 		}
 	}
 	
 	class Volatile0 implements Runnable {
 		public void run() {
-//			System.out.println("Thread0");
-			
 			va = 1;
+//			sleep(1);
 			x = vb;
 		}
 	}
 	
 	class Volatile1 implements Runnable {
 		public void run() {
-//			System.out.println("Thread1");
-			
 			vb = 1;
+//			sleep(1);
 			y = va;
 		}
 	}
 
+	void sleep(long millis) {
+		try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	}
+	
+//	void sleep() {
+//		sleep(0);
+//	}
 }
