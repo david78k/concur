@@ -13,8 +13,21 @@ class ExpandableArray {
 	
 	// INV: 0 <= size <= data.length
 	
+	/**
+	 * @param cap capacity
+	 */
 	public ExpandableArray(int cap) {
 		data = new Object[cap];
+	}
+	
+	public static void main(String[] args) {
+		// client side locking
+		ExpandableArray v = new ExpandableArray(0);
+		
+		synchronized (v) {
+			for (int i = 0; i < v.size(); i++) 
+				System.out.println(v.get(i));
+		}
 	}
 	
 	public synchronized int size() {
