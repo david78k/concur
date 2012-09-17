@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
-public class SwingCaseStudy {
+class SwingCaseStudy {
 	
 	public void initialize() {
 		JButton button = new JButton("Select Me");

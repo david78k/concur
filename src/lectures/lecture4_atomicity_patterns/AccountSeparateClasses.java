@@ -1,7 +1,7 @@
 package lectures.lecture4_atomicity_patterns;
 
 @ThreadSafe
-public class AccountSeparateClasses {
+class AccountSeparateClasses {
 	private static final int MINBALANCE = 0;
 	
 	/*

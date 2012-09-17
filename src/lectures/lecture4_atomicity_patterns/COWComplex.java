@@ -1,7 +1,7 @@
 package lectures.lecture4_atomicity_patterns;
 
 // Copy on write Complex
-public class COWComplex {
+class COWComplex {
 	
 	/**
 	 * @param args

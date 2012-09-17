@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.EventListener;
 import java.util.NoSuchElementException;
 
-public class EventListenerList implements Serializable {
+class EventListenerList implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

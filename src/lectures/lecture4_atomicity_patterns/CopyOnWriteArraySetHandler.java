@@ -3,7 +3,7 @@ package lectures.lecture4_atomicity_patterns;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 // uses an internal CopyOnWriteArraySet
-public class CopyOnWriteArraySetHandler {
+class CopyOnWriteArraySetHandler {
 	
 	class Handler {
 		void handle() {}
