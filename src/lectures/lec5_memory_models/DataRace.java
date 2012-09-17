@@ -7,9 +7,6 @@ public class DataRace {
 //	boolean done = false;
 	int x;
 	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		new DataRace().start();
 	}
