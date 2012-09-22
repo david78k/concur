@@ -2,22 +2,26 @@ package edu.ufl.cise.cop5618fa12.hw1;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class PetersonTwoVar implements HW1Lock {
+public class PetersonAtomicBooleanArray implements HW1Lock {
 
 	//flag[] is boolean array; and turn is an integer
-	AtomicBoolean flag1;
-	AtomicBoolean flag2;
-	volatile boolean vflag1;
-	volatile boolean vflag2;
+	volatile boolean flag[] = new boolean[2];
+//	AtomicBoolean flag[];
+//	AtomicIntegerArray flag[];
 	int turn;
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		
 	}
 
+	public PetersonAtomicBooleanArray () {
+		flag[0] = false;
+		flag[1] = false;
+	}
+	
 	@Override
 	public void lock(int threadID) {
 	}
@@ -33,6 +37,7 @@ public class PetersonTwoVar implements HW1Lock {
 
 	@Override
 	public void unlock(int threadID) {
+		notifyAll();
 	}
 
 }
