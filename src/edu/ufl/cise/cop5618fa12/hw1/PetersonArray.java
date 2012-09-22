@@ -14,69 +14,6 @@ public class PetersonArray implements HW1Lock {
 	private static final AtomicInteger turn = new AtomicInteger();
 //	static int turn;
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-//		PetersonArray arr = new PetersonArray();
-//		arr.start();
-		
-		PetersonArray lock = new PetersonArray();
-		
-//		Thread t0 = new Thread(new PetersonThread(0));
-		Thread t1 = new Thread();
-		lock.lock(0);
-		
-	}
-
-	class PetersonThread implements Runnable {
-		private int ID;
-		
-		public PetersonThread (int ID) {
-			this.ID = ID;
-		}
-		
-		@Override
-		public void run() {
-			lock(ID);
-			
-			// critical section
-			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
-			
-			unlock(ID);
-		}
-		
-	}
-	
-	class RunnableThread implements Runnable {
-		private int ID;
-		
-		public RunnableThread (int ID) {
-			this.ID = ID;
-		}
-		
-		@Override
-		public void run() {
-			lock(ID);
-			
-			// critical section
-			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
-			
-			unlock(ID);
-		}
-		
-	}
-	
-	public void start() {
-		Thread t0 = new Thread(new RunnableThread(0));
-		Thread t1 = new Thread(new RunnableThread(1));
-		
-		t0.start();
-		t1.start();
-		
-		System.out.println("done");
-	}
-	
 	public PetersonArray () {
 		flag[0] = new AtomicBoolean();
 		flag[1] = new AtomicBoolean();
@@ -105,7 +42,12 @@ public class PetersonArray implements HW1Lock {
 
 	@Override
 	public boolean tryLock(int threadID) {
-		return false;
+		int other = 1 - threadID;
+		
+		flag[threadID].set(true);
+		turn.set(other);
+		
+		return (flag[other].get() && turn.get() == other);
 	}
 
 	@Override

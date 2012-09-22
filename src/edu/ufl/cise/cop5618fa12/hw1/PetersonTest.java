@@ -19,6 +19,14 @@ public class PetersonTest implements HW1Test{
 		
 		try {
 			test.testLock(arrayLock, N0, N1);
+			test.testTrylock(arrayLock, N0, N1);
+			
+			test.testLock(twoVarLock, N0, N1);
+			test.testTrylock(twoVarLock, N0, N1);
+			
+			test.comparePerformanceSingleThread(arrayLock, twoVarLock, N0);
+			test.comparePerformanceTwoThread(arrayLock, twoVarLock, N0, N1);
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -26,18 +34,38 @@ public class PetersonTest implements HW1Test{
 		System.out.println("done");
 	}
 	
-	class RunnableThread implements Runnable {
-		private int ID;
-		private HW1Lock lock;
+	class LockThread implements Runnable {
+		protected int ID;
+		protected HW1Lock lock;
 		
-		public RunnableThread (int ID, HW1Lock lock) {
+		public LockThread (int ID, HW1Lock lock) {
 			this.ID = ID;
 			this.lock = lock;
 		}
 		
 		@Override
 		public void run() {
+//			if(lock instanceof PetersonArray) {
 			lock.lock(ID);
+			
+			// critical section
+			System.out.println("ID = " + ID + ", turn = " );
+//			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
+			
+			lock.unlock(ID);
+		}
+		
+	}
+	
+	class TryLockThread extends LockThread {
+		
+		public TryLockThread (int ID, HW1Lock lock) {
+			super(ID, lock);
+		}
+		
+		@Override
+		public void run() {
+			lock.tryLock(ID);
 			
 			// critical section
 			System.out.println("ID = " + ID + ", turn = " );
@@ -51,8 +79,8 @@ public class PetersonTest implements HW1Test{
 	@Override
 	public boolean testLock(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		t0 = new Thread(new RunnableThread(0, lock));
-		t1 = new Thread(new RunnableThread(1, lock));
+		t0 = new Thread(new LockThread(0, lock));
+		t1 = new Thread(new LockThread(1, lock));
 		
 		t0.start();
 		t1.start();
@@ -63,13 +91,26 @@ public class PetersonTest implements HW1Test{
 	@Override
 	public boolean testTrylock(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		return false;
+		t0 = new Thread(new TryLockThread(0, lock));
+		t1 = new Thread(new TryLockThread(1, lock));
+		
+		t0.start();
+		t1.start();
+		
+		return true;
 	}
 
 	@Override
 	public boolean testLockInterruptibly(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		return false;
+		t0 = new Thread(new TryLockThread(0, lock));
+		t1 = new Thread(new TryLockThread(1, lock));
+		
+		t0.start();
+		t1.start();
+		
+		return true;
+//		return false;
 	}
 
 	@Override
