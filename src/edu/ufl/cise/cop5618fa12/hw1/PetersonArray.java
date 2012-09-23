@@ -38,6 +38,16 @@ public class PetersonArray implements HW1Lock {
 
 	@Override
 	public void lockInterruptibly(int threadID) throws InterruptedException {
+		int other = 1 - threadID;
+		
+		flag[threadID].set(true);
+		turn.set(other);
+		
+		while (flag[other].get() && turn.get() == other) {
+			if(Thread.interrupted()) {
+				throw new InterruptedException();
+			} 
+		}
 	}
 
 	@Override
