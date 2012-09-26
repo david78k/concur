@@ -2,7 +2,6 @@ package edu.ufl.cise.cop5618fa12.hw1;
 
 public class PetersonTest implements HW1Test{
 
-//	RunnableThread rt = new RunnableThread(0, arrayLock);
 	private Thread t0;
 	private Thread t1;
 	

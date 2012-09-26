@@ -11,8 +11,8 @@ public class PetersonArray implements HW1Lock {
 //	volatile boolean flag[] = new boolean[2];
 	private static final AtomicBoolean flag[] = new AtomicBoolean[2];
 //	AtomicIntegerArray flag[];
-	private static final AtomicInteger turn = new AtomicInteger();
-//	static int turn;
+//	private static final AtomicInteger turn = new AtomicInteger();
+	private volatile int turn;
 	
 	public PetersonArray () {
 		flag[0] = new AtomicBoolean();
@@ -25,9 +25,11 @@ public class PetersonArray implements HW1Lock {
 		int other = 1 - threadID;
 		
 		flag[threadID].set(true);
-		turn.set(other);
+		turn = other;
+//		turn.set(other);
 		
-		while (flag[other].get() && turn.get() == other) {
+//		while (flag[other].get() && turn.get() == other) {
+		while (flag[other].get() && turn == other) {
 //			try {
 //				wait();
 //			} catch (InterruptedException e) {
@@ -41,9 +43,11 @@ public class PetersonArray implements HW1Lock {
 		int other = 1 - threadID;
 		
 		flag[threadID].set(true);
-		turn.set(other);
+		turn = other;
+//		turn.set(other);
 		
-		while (flag[other].get() && turn.get() == other) {
+//		while (flag[other].get() && turn.get() == other) {
+		while (flag[other].get() && turn == other) {
 			if(Thread.interrupted()) {
 				throw new InterruptedException();
 			} 
@@ -55,9 +59,11 @@ public class PetersonArray implements HW1Lock {
 		int other = 1 - threadID;
 		
 		flag[threadID].set(true);
-		turn.set(other);
+		turn = other;
+//		turn.set(other);
 		
-		return (flag[other].get() && turn.get() == other);
+		return (flag[other].get() && turn == other);
+//		return (flag[other].get() && turn.get() == other);
 	}
 
 	@Override
