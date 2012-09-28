@@ -56,6 +56,34 @@ public class PetersonTest implements HW1Test{
 		System.out.println(" ======== ");
 	}
 	
+	public void test(HW1Lock lock, int N0, int N1) throws InterruptedException {
+//		initialize(lock);
+		
+		String name = getMethodName(1);
+		
+		System.out.print("======== ");
+		System.out.print(name + ", " + lock.getClass().getSimpleName());
+		System.out.println(" ======== ");
+		
+		if (name.equals("testLock")) {
+			t0 = new Thread(new LockThread(0, lock, N0));
+			t1 = new Thread(new LockThread(1, lock, N1));
+		} else if (name.equals("testTrylock")) {
+			t0 = new Thread(new TryLockThread(0, lock, N0));
+			t1 = new Thread(new TryLockThread(1, lock, N1));
+		} else if (name.equals("testLockInterruptibly")) {
+			t0 = new Thread(new LockInterruptiblyThread(0, lock, N0));
+			t1 = new Thread(new LockInterruptiblyThread(1, lock, N1));
+		} else {
+		}
+		
+//		startTest();
+		t0.start(); t1.start();
+		t0.join(); t1.join();
+		
+		System.out.println();
+	}
+	
 	public void startTest() throws InterruptedException {
 		t0.start(); t1.start();
 		t0.join(); t1.join();
@@ -67,33 +95,28 @@ public class PetersonTest implements HW1Test{
 	@Override
 	public boolean testLock(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		initialize(lock);
-//		String name = getMethodName(1);
-//		System.out.println(name + ", " + lock.getClass().getSimpleName());
-		
-		t0 = new Thread(new LockThread(0, lock));
-		t1 = new Thread(new LockThread(1, lock));
-		
-		startTest();
-//		t0.start(); t1.start();
-//		t0.join(); t1.join();
+		test(lock, N0, N1);
+//		initialize(lock);
+//		
+//		t0 = new Thread(new LockThread(0, lock));
+//		t1 = new Thread(new LockThread(1, lock));
+//		
+//		startTest();
 		
 		return true;
+//		return false;
 	}
 
 	@Override
 	public boolean testTrylock(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		initialize(lock);
-//		String name = getMethodName(1);
-//		System.out.println(name + ", " + lock.getClass().getSimpleName());
-		
-		t0 = new Thread(new TryLockThread(0, lock));
-		t1 = new Thread(new TryLockThread(1, lock));
-		
-		startTest();
-//		t0.start();	t1.start();
-//		t0.join(); t1.join();
+		test(lock, N0, N1);
+//		initialize(lock);
+//		
+//		t0 = new Thread(new TryLockThread(0, lock));
+//		t1 = new Thread(new TryLockThread(1, lock));
+//		
+//		startTest();
 		
 		return true;
 	}
@@ -101,16 +124,13 @@ public class PetersonTest implements HW1Test{
 	@Override
 	public boolean testLockInterruptibly(HW1Lock lock, int N0, int N1)
 			throws InterruptedException {
-		initialize(lock);
-//		String name = getMethodName(1);
-//		System.out.println(name);
-		
-		t0 = new Thread(new LockInterruptiblyThread(0, lock));
-		t1 = new Thread(new LockInterruptiblyThread(1, lock));
-		
-		startTest();
-//		t0.start();	t1.start();
-//		t0.join(); t1.join();
+		test(lock, N0, N1);
+//		initialize(lock);
+//		
+//		t0 = new Thread(new LockInterruptiblyThread(0, lock));
+//		t1 = new Thread(new LockInterruptiblyThread(1, lock));
+//		
+//		startTest();
 		
 		return true;
 //		return false;
@@ -129,6 +149,7 @@ public class PetersonTest implements HW1Test{
 	}
 	
 	class LockThread implements Runnable {
+		private int N = 0;
 		protected int ID;
 		protected final HW1Lock lock;
 		
@@ -137,33 +158,31 @@ public class PetersonTest implements HW1Test{
 			this.lock = lock;
 		}
 		
+		public LockThread (int ID, HW1Lock lock, int N) {
+			this.ID = ID;
+			this.lock = lock;
+			this.N = N;
+		}
+		
 		@Override
 		public void run() {
-//			if(lock instanceof PetersonArray) {
-			lock.lock(ID);
+			String className = this.getClass().getSimpleName();
+			System.out.println(className);
 			
-			try {
-				// critical section
-				System.out.println("ID = " + ID + ", turn = " );
-				//			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
-			} finally {
-				lock.unlock(ID);
-			}
-		}
-		
-	}
-	
-	class TryLockThread extends LockThread {
-		
-		public TryLockThread (int ID, HW1Lock lock) {
-			super(ID, lock);
-		}
-		
-		@Override
-		public void run() {
-			if(!lock.tryLock(ID)) {
-				
-			} else {
+//			if(lock instanceof PetersonArray) {
+			for (int i = 0; i < N; i++) {
+				if (className.equals("LockThread")) {
+					lock.lock(ID);
+				} else if (className.equals("TryLockThread")) {
+					lock.tryLock(ID);
+				} else if (className.equals("LockInterruptiblyThread")) {
+					try {
+						lock.lockInterruptibly(ID);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
 				try {
 					// critical section
 					System.out.println("ID = " + ID + ", turn = " );
@@ -176,29 +195,59 @@ public class PetersonTest implements HW1Test{
 		
 	}
 	
+	class TryLockThread extends LockThread {
+		
+		public TryLockThread (int ID, HW1Lock lock) {
+			super(ID, lock);
+		}
+		
+		public TryLockThread (int ID, HW1Lock lock, int N) {
+			super(ID, lock, N);
+		}
+		
+//		@Override
+//		public void run() {
+//			if(!lock.tryLock(ID)) {
+//				
+//			} else {
+//				try {
+//					// critical section
+//					System.out.println("ID = " + ID + ", turn = " );
+//					//			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
+//				} finally {
+//					lock.unlock(ID);
+//				}
+//			}
+//		}
+		
+	}
+	
 	class LockInterruptiblyThread extends LockThread {
 		
 		public LockInterruptiblyThread (int ID, HW1Lock lock) {
 			super(ID, lock);
 		}
 		
-		@Override
-		public void run() {
-			try {
-				lock.lockInterruptibly(ID);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			try {
-				// critical section
-				System.out.println("ID = " + ID + ", turn = " );
-				//			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
-			} finally {
-				lock.unlock(ID);
-			}
+		public LockInterruptiblyThread (int ID, HW1Lock lock, int N) {
+			super(ID, lock, N);
 		}
 		
+//		@Override
+//		public void run() {
+//			try {
+//				lock.lockInterruptibly(ID);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//
+//			try {
+//				// critical section
+//				System.out.println("ID = " + ID + ", turn = " );
+//				//			System.out.println("ID = " + ID + ", turn = " + turn + ", " + flag[ID]);
+//			} finally {
+//				lock.unlock(ID);
+//			}
+//		}
 	}
 
 }
