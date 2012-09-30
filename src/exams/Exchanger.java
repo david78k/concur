@@ -46,6 +46,9 @@ public class Exchanger<E> {
 	// For SP07/SP09 mid: use locks and condition variables
 	public E exchange(E e) throws InterruptedException {
 		// < await (nafirst == ndfirst || nsecond < nafirst)
+		lock.lock();
+		
+		try {
 			while (!(nafirst == ndfirst || nsecond < nafirst)) {
 				cond1.await();
 			}
@@ -53,11 +56,11 @@ public class Exchanger<E> {
 			if (nafirst == ndfirst) {	// empty and first arrives
 				nafirst ++;
 				first_slot = e;
-				cond1.signal();
+//				cond1.signal();
 			} else { // second arrives
 				nsecond ++;
 				second_slot = e;
-				cond2.signal();
+				cond2.signalAll();
 				return first_slot;
 			} 
 
@@ -68,7 +71,11 @@ public class Exchanger<E> {
 
 			// first thread returns
 			ndfirst ++;
+			cond1.signalAll();
 			return second_slot;
+		} finally {
+			lock.unlock();
+		}
 		// >
 	}
 	
