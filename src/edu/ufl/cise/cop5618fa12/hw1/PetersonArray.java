@@ -1,40 +1,43 @@
 package edu.ufl.cise.cop5618fa12.hw1;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public class PetersonArray implements HW1Lock {
 
-//	private static int ID;
-	
 	//flag[] is boolean array; and turn is an integer
 //	volatile boolean flag[] = new boolean[2];
-	private static final AtomicBoolean flag[] = new AtomicBoolean[2];
-//	AtomicIntegerArray flag[];
+	private final AtomicIntegerArray flag = new AtomicIntegerArray(2);
+	private volatile int turn = 0;
 //	private static final AtomicInteger turn = new AtomicInteger();
-	private volatile int turn;
 	
 	public PetersonArray () {
-		flag[0] = new AtomicBoolean();
-		flag[1] = new AtomicBoolean();
-//		turn = new AtomicInteger();
+		flag.set(0, 0);
+		flag.set(1, 0);
+	}
+	
+	class AtomicBooleanArray {
+		private AtomicIntegerArray array;
+
+		public AtomicBooleanArray(int length) {
+			array = new AtomicIntegerArray(length);
+		}
+		
+		boolean get(int i) {
+			return array.get(i) == 1;
+		}
+		
+//		void set()
 	}
 	
 	@Override
 	public void lock(int threadID) {
 		int other = 1 - threadID;
 		
-		flag[threadID].set(true);
+		flag.set(threadID, 1);
 		turn = other;
-//		turn.set(other);
 		
-//		while (flag[other].get() && turn.get() == other) {
-		while (flag[other].get() && turn == other) {
-//			try {
-//				wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
+		while ((flag.get(other) == 1) && turn == other) {
+			/* busy wait */
 		}
 	}
 
@@ -42,15 +45,15 @@ public class PetersonArray implements HW1Lock {
 	public void lockInterruptibly(int threadID) throws InterruptedException {
 		int other = 1 - threadID;
 		
-		flag[threadID].set(true);
+		flag.set(threadID, 1);
 		turn = other;
-//		turn.set(other);
 		
-//		while (flag[other].get() && turn.get() == other) {
-		while (flag[other].get() && turn == other) {
-			if(Thread.interrupted()) {
-				throw new InterruptedException();
-			} 
+		while ((flag.get(other) == 1) && turn == other) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -58,18 +61,20 @@ public class PetersonArray implements HW1Lock {
 	public boolean tryLock(int threadID) {
 		int other = 1 - threadID;
 		
-		flag[threadID].set(true);
+		flag.set(threadID, 1);
 		turn = other;
-//		turn.set(other);
 		
-		return (flag[other].get() && turn == other);
-//		return (flag[other].get() && turn.get() == other);
+		// if locked by other thread
+		if (flag.get(other) == 1 && turn == other) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override
 	public void unlock(int threadID) {
-//		flag[threadID].compareAndSet(true, false);
-		flag[threadID].set(false);
+		flag.set(threadID, 0);
 //		notifyAll();
 	}
 

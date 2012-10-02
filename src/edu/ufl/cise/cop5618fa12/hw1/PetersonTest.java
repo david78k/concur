@@ -1,5 +1,7 @@
 package edu.ufl.cise.cop5618fa12.hw1;
 
+import java.util.concurrent.CountDownLatch;
+
 public class PetersonTest implements HW1Test{
 
 	private Thread t0;
@@ -139,12 +141,33 @@ public class PetersonTest implements HW1Test{
 	@Override
 	public long comparePerformanceSingleThread(HW1Lock lock1, HW1Lock lock2,
 			int N) {
+		final CountDownLatch startLatch = new CountDownLatch(1);
+		final CountDownLatch endLatch = new CountDownLatch(N);  
+		
+//		Thread t0 = new Thread().start();
+//		¡¦
+//		Thread tN = new Thread().start();
+		
+		long startTime = System.nanoTime();
+		startLatch.countDown();
+		
+//		try{startLatch.await();}
+//		catch(InterruptedException e){/*ignore*/}
+		
+		try {
+			endLatch.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		long elapsedTime = System.nanoTime()-startTime;
 		return 0;
 	}
 
 	@Override
 	public long comparePerformanceTwoThread(HW1Lock lock0, HW1Lock lock1,
 			int N0, int N1) throws InterruptedException {
+
 		return 0;
 	}
 	
