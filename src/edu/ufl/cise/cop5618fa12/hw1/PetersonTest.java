@@ -1,7 +1,5 @@
 package edu.ufl.cise.cop5618fa12.hw1;
 
-import java.util.concurrent.CountDownLatch;
-
 public class PetersonTest implements HW1Test{
 
 	private Thread t0;
@@ -47,28 +45,22 @@ public class PetersonTest implements HW1Test{
 		System.out.println("********* TESTS COMPLETE. *********");
 	}
 	
-	public void init() {
-		shared0 = 0; shared1 = 0;
+	@Override
+	public boolean testLock(HW1Lock lock, int N0, int N1)
+			throws InterruptedException {
+		return test(lock, N0, N1, TYPE.testLock);
 	}
 	
-	/**
-	 * 	0 is getStackTrace(),
-	 *	1 is getMethodName(int depth) and
-	 *	2 is invoking method.
-	 * @param depth
-	 * @return
-	 */
-	public static String getMethodName(final int depth)
-	{
-	  final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-
-	  return ste[ste.length - 1 - depth].getMethodName(); 
+	@Override
+	public boolean testTrylock(HW1Lock lock, int N0, int N1)
+			throws InterruptedException {
+		return test(lock, N0, N1, TYPE.testTrylock);
 	}
 	
-	void printResults(int expected) {
-		System.out.println("Expected: (shared0, shared1) = (" + expected + ", " + expected + ")");
-		System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
-		System.out.println("Result:   " + (shared0 == expected && shared1 == expected) + "\n");
+	@Override
+	public boolean testLockInterruptibly(HW1Lock lock, int N0, int N1)
+			throws InterruptedException {
+		return test(lock, N0, N1, TYPE.testLockInterruptibly);
 	}
 	
 	public boolean test(HW1Lock lock, int N0, int N1, TYPE type) throws InterruptedException {
@@ -111,24 +103,6 @@ public class PetersonTest implements HW1Test{
 		}
 		
 		return result;
-	}
-
-	@Override
-	public boolean testLock(HW1Lock lock, int N0, int N1)
-			throws InterruptedException {
-		return test(lock, N0, N1, TYPE.testLock);
-	}
-
-	@Override
-	public boolean testTrylock(HW1Lock lock, int N0, int N1)
-			throws InterruptedException {
-		return test(lock, N0, N1, TYPE.testTrylock);
-	}
-
-	@Override
-	public boolean testLockInterruptibly(HW1Lock lock, int N0, int N1)
-			throws InterruptedException {
-		return test(lock, N0, N1, TYPE.testLockInterruptibly);
 	}
 
 	@Override
@@ -285,4 +259,23 @@ public class PetersonTest implements HW1Test{
 			super(ID, lock, N);
 		}
 	}
+	
+	public void init() {
+		shared0 = 0; shared1 = 0;
+	}
+	
+	/**
+	 * 	0 is getStackTrace(),
+	 *	1 is getMethodName(int depth) and
+	 *	2 is invoking method.
+	 * @param depth
+	 * @return
+	 */
+	public static String getMethodName(final int depth)
+	{
+	  final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+
+	  return ste[ste.length - 1 - depth].getMethodName(); 
+	}
+	
 }
