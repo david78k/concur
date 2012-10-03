@@ -5,10 +5,8 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
 public class PetersonArray implements HW1Lock {
 
 	//flag[] is boolean array; and turn is an integer
-//	volatile boolean flag[] = new boolean[2];
 	private final AtomicIntegerArray flag = new AtomicIntegerArray(2);
 	private volatile int turn = 0;
-//	private static final AtomicInteger turn = new AtomicInteger();
 	
 	public PetersonArray () {
 		flag.set(0, 0);
@@ -35,11 +33,8 @@ public class PetersonArray implements HW1Lock {
 		turn = other;
 		
 		while ((flag.get(other) == 1) && turn == other) {
-//			wait();
 			if(Thread.interrupted()) {
-//				System.out.println("interruped");
 				throw new InterruptedException();
-//				throw new InterruptedException("interrupted");
 			}
 		}
 	}
@@ -51,11 +46,6 @@ public class PetersonArray implements HW1Lock {
 		flag.set(threadID, 1);
 		turn = other;
 		
-		// if locked by other thread
-//		if (flag.get(other) == 1 && turn == other) {
-//			return false;
-//		}
-		
 		return !(flag.get(other) == 1 && turn == other);
 	}
 
@@ -64,18 +54,4 @@ public class PetersonArray implements HW1Lock {
 		flag.set(threadID, 0);
 	}
 
-	class AtomicBooleanArray {
-		private AtomicIntegerArray array;
-
-		public AtomicBooleanArray(int length) {
-			array = new AtomicIntegerArray(length);
-		}
-		
-		boolean get(int i) {
-			return array.get(i) == 1;
-		}
-		
-//		void set()
-	}
-	
 }

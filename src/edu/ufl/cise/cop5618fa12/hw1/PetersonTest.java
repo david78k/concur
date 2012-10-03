@@ -127,7 +127,7 @@ public class PetersonTest implements HW1Test{
 		}
 		
 		long elapsedTime0 = System.nanoTime()-startTime;
-		if(debug) 
+//		if(debug) 
 			System.out.println("ElapsedTime0 = " + elapsedTime0);
 		
 		//--------------- test lock2 -----------------//
@@ -144,10 +144,10 @@ public class PetersonTest implements HW1Test{
 		}
 		
 		long elapsedTime1 = System.nanoTime()-startTime;
-		if(debug) {
+//		if(debug) {
 			System.out.println("ElapsedTime1 = " + elapsedTime1);
 //			System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
-		}
+//		}
 		
 		//-------------- compare elapsed times ----------------//
 		long diff = elapsedTime1 - elapsedTime0;
