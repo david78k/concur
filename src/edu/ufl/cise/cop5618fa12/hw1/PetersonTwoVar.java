@@ -5,21 +5,33 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PetersonTwoVar implements HW1Lock {
 
 	//flag[] is boolean array; and turn is an integer
-	AtomicBoolean flag1;
-	AtomicBoolean flag2;
-	volatile boolean vflag1;
-	volatile boolean vflag2;
-	int turn;
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-	}
+//	private AtomicBoolean flag1;
+//	private AtomicBoolean flag2;
+	private volatile boolean flag0 = false;
+	private volatile boolean flag1 = false;
+	private volatile int turn = 0;
+//	private int turn = 0;
 
 	@Override
 	public void lock(int threadID) {
+		int other = 1 - threadID;
+
+//		flag.set(threadID, 1);
+		if (threadID == 0) {
+			flag0 = true;
+			turn = other;
+
+			while (flag1 && turn == other) {
+				/* busy wait */
+			}
+		} else {
+			flag1 = true;
+			turn = other;
+			
+			while (flag0 && turn == other) {
+				/* busy wait */
+			}
+		}
 	}
 
 	@Override
@@ -33,6 +45,8 @@ public class PetersonTwoVar implements HW1Lock {
 
 	@Override
 	public void unlock(int threadID) {
+		if(threadID == 0) flag0 = false;
+		else flag1 = false;
 	}
 
 }

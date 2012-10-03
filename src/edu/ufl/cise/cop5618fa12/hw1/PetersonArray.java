@@ -8,6 +8,7 @@ public class PetersonArray implements HW1Lock {
 //	volatile boolean flag[] = new boolean[2];
 	private final AtomicIntegerArray flag = new AtomicIntegerArray(2);
 	private volatile int turn = 0;
+//	private int turn = 0;
 //	private static final AtomicInteger turn = new AtomicInteger();
 	
 	public PetersonArray () {
@@ -35,6 +36,7 @@ public class PetersonArray implements HW1Lock {
 		turn = other;
 		
 		while ((flag.get(other) == 1) && turn == other) {
+			wait();
 			if(Thread.interrupted()) {
 //				System.out.println("interruped");
 				throw new InterruptedException();
@@ -51,11 +53,11 @@ public class PetersonArray implements HW1Lock {
 		turn = other;
 		
 		// if locked by other thread
-		if (flag.get(other) == 1 && turn == other) {
-			return false;
-		}
+//		if (flag.get(other) == 1 && turn == other) {
+//			return false;
+//		}
 		
-		return true;
+		return !(flag.get(other) == 1 && turn == other);
 	}
 
 	@Override
