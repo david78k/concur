@@ -36,7 +36,7 @@ public class PetersonArray implements HW1Lock {
 		turn = other;
 		
 		while ((flag.get(other) == 1) && turn == other) {
-			wait();
+//			wait();
 			if(Thread.interrupted()) {
 //				System.out.println("interruped");
 				throw new InterruptedException();

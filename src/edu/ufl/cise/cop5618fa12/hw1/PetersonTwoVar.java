@@ -7,8 +7,10 @@ public class PetersonTwoVar implements HW1Lock {
 	//flag[] is boolean array; and turn is an integer
 //	private AtomicBoolean flag1;
 //	private AtomicBoolean flag2;
-	private volatile boolean flag0 = false;
-	private volatile boolean flag1 = false;
+//	private volatile boolean flag0 = false;
+//	private volatile boolean flag1 = false;
+	private boolean flag0 = false;
+	private boolean flag1 = false;
 	private volatile int turn = 0;
 //	private int turn = 0;
 
