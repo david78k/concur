@@ -12,13 +12,11 @@ public class PetersonTwoVar implements HW1Lock {
 	private boolean flag0 = false;
 	private boolean flag1 = false;
 	private volatile int turn = 0;
-//	private int turn = 0;
 
 	@Override
 	public void lock(int threadID) {
 		int other = 1 - threadID;
-
-//		flag.set(threadID, 1);
+		
 		if (threadID == 0) {
 			flag0 = true;
 			turn = other;
@@ -38,11 +36,44 @@ public class PetersonTwoVar implements HW1Lock {
 
 	@Override
 	public void lockInterruptibly(int threadID) throws InterruptedException {
+		int other = 1 - threadID;
+		
+		if (threadID == 0) {
+			flag0 = true;
+			turn = other;
+
+			while (flag1 && turn == other) {
+				if(Thread.interrupted()) {
+					throw new InterruptedException();
+				}
+			}
+		} else {
+			flag1 = true;
+			turn = other;
+			
+			while (flag0 && turn == other) {
+				if(Thread.interrupted()) {
+					throw new InterruptedException();
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean tryLock(int threadID) {
-		return false;
+		int other = 1 - threadID;
+
+		if (threadID == 0) {
+			flag0 = true;
+			turn = other;
+
+			return !(flag1 && turn == other);
+		} else {
+			flag1 = true;
+			turn = other;
+			
+			return !(flag0 && turn == other);
+		}
 	}
 
 	@Override

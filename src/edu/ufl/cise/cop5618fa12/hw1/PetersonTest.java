@@ -11,6 +11,7 @@ public class PetersonTest implements HW1Test{
 	private final static int iter = 1000000;
 	private static enum TYPE {testLock, testTrylock, testLockInterruptibly};
 	private final static boolean debug = false;
+//	private final static boolean debug = true;
 	
 	public static void main(String[] args) {
 
@@ -21,24 +22,25 @@ public class PetersonTest implements HW1Test{
 		int N0 = iter, N1 = iter;
 		
 		try {
-//			test.testLock(arrayLock, N0, N1);
-//			System.out.println();
-//			test.testTrylock(arrayLock, N0, N1);
-//			System.out.println();
-//			test.testLockInterruptibly(arrayLock, N0, N1);
-//			System.out.println();
-//			
-//			test.testLock(twoVarLock, N0, N1);
-//			System.out.println();
-//			test.testTrylock(twoVarLock, N0, N1);
-//			System.out.println();
-//			test.testLockInterruptibly(twoVarLock, N0, N1);
-//			System.out.println();
-//			
+			test.testLock(arrayLock, N0, N1);
+			System.out.println();
+			test.testTrylock(arrayLock, N0, N1);
+			System.out.println();
+			test.testLockInterruptibly(arrayLock, N0, N1);
+			System.out.println();
+			
+			test.testLock(twoVarLock, N0, N1);
+			System.out.println();
+			test.testTrylock(twoVarLock, N0, N1);
+			System.out.println();
+			test.testLockInterruptibly(twoVarLock, N0, N1);
+			System.out.println();
+			
 			test.comparePerformanceSingleThread(arrayLock, twoVarLock, N0);
 			test.comparePerformanceTwoThread(arrayLock, twoVarLock, N0, N1);
 			
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
+//		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
@@ -139,44 +141,30 @@ public class PetersonTest implements HW1Test{
 		
 		init();
 	
-//		t0 = new Thread(new LockThread(0, lock1, N));
-//		t1 = new Thread(new LockThread(1, lock2, N));
-		
 		//--------------- test lock1 -----------------//
-//		t0.start();
-		
 		long startTime = System.nanoTime();
 		
-//		try {
-//			t0.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		try {
 			testLock(lock1, N, 0);
+			testTrylock(lock1, N, 0);
+			testLockInterruptibly(lock1, N, 0);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
 		
 		long elapsedTime0 = System.nanoTime()-startTime;
-		if(debug) {
+		if(debug) 
 			System.out.println("ElapsedTime0 = " + elapsedTime0);
-//			System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
-		}
 		
 		//--------------- test lock2 -----------------//
 		init();
-//		t1.start();
 		
 		startTime = System.nanoTime();
 		
-//		try {
-//			t1.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		try {
 			testLock(lock2, N, 0);
+			testTrylock(lock2, N, 0);
+			testLockInterruptibly(lock2, N, 0);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
@@ -187,6 +175,7 @@ public class PetersonTest implements HW1Test{
 //			System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
 		}
 		
+		//-------------- compare elapsed times ----------------//
 		long diff = elapsedTime1 - elapsedTime0;
 		System.out.println("diff(t1-t0) = " + diff + " nanoseconds");
 		System.out.println();
@@ -202,58 +191,39 @@ public class PetersonTest implements HW1Test{
 		System.out.print(name + ": " + lock0.getClass().getSimpleName() + " vs " + lock1.getClass().getSimpleName());
 		System.out.println(" ********* ");
 		
-		init();
-		
-		final CountDownLatch startLatch = new CountDownLatch(1);
-		final CountDownLatch endLatch = new CountDownLatch(N0);  
-		
-//		Thread t0 = new Thread().start();
-//		¡¦
-//		Thread tN = new Thread().start();
-		
 		//--------------- test lock0 -----------------//
 		long startTime = System.nanoTime();
-//		startLatch.countDown();
 		
 		try {
 			testLock(lock0, N0, N1);
+			testTrylock(lock0, N0, N1);
+			testLockInterruptibly(lock0, N0, N1);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
 		
 		long elapsedTime0 = System.nanoTime()-startTime;
-		if(debug) {
+//		if(debug) 
 			System.out.println("ElapsedTime0 = " + elapsedTime0);
 //			System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
-		}
-		
-//		try{startLatch.await();}
-//		catch(InterruptedException e){/*ignore*/}
-		
-//		try {
-//			endLatch.await();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		
 		//--------------- test lock1 -----------------//
-		init();
-//		t1.start();
-		
 		startTime = System.nanoTime();
 		
 		try {
 			testLock(lock1, N0, N1);
+			testTrylock(lock1, N0, N1);
+			testLockInterruptibly(lock1, N0, N1);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
 		
 		long elapsedTime1 = System.nanoTime()-startTime;
-		if(debug) {
-			System.out.println(elapsedTime1);
+//		if(debug) 
+			System.out.println("ElapsedTime1 = " + elapsedTime1);
 //			System.out.println("Tested:   (shared0, shared1) = (" + shared0 + ", " + shared1 + ")");
-		}
 		
+		//-------------- compare elapsed times ----------------//
 		long diff = elapsedTime1 - elapsedTime0;
 		System.out.println("diff(t1-t0) = " + diff + " nanoseconds");
 		System.out.println();
@@ -288,7 +258,6 @@ public class PetersonTest implements HW1Test{
 						lock.lockInterruptibly(ID);
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
-//						e.printStackTrace();
 					}
 				} else { return; }
 

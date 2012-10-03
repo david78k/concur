@@ -8,7 +8,6 @@ public class PetersonArray implements HW1Lock {
 //	volatile boolean flag[] = new boolean[2];
 	private final AtomicIntegerArray flag = new AtomicIntegerArray(2);
 	private volatile int turn = 0;
-//	private int turn = 0;
 //	private static final AtomicInteger turn = new AtomicInteger();
 	
 	public PetersonArray () {
