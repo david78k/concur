@@ -1,7 +1,9 @@
 package org.apache.commons.collections;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 public class FastArrayListTest extends Thread{
 
@@ -44,4 +46,42 @@ public class FastArrayListTest extends Thread{
 		l.add(l); 
 		l.toString(); // OK 
 	}
+	
+	public void testLookup() {
+        final int ITERATIONS = 50000;
+ 
+        // ArrayList
+        ArrayList arrayList = new ArrayList();
+        insert(arrayList, ITERATIONS);
+        lookup(arrayList, ITERATIONS);
+ 
+        // TreeSet
+        TreeSet treeSet = new TreeSet();
+        insert(treeSet, ITERATIONS);
+        lookup(treeSet, ITERATIONS);
+    }
+ 
+    private static void insert(Collection col, int qty){
+        long startStamp = System.currentTimeMillis();
+ 
+        for (int i=0; i<qty; i++){
+            col.add(RandomStringUtils.randomAlphanumeric(10));
+        }
+ 
+        long time = System.currentTimeMillis() - startStamp;
+ 
+        System.out.println("Took " + time + " ms to insert " + qty + " to " + col.getClass().getName());
+    }
+ 
+    private static void lookup(Collection col, int qty){
+        long startStamp = System.currentTimeMillis();
+ 
+        for (int i=0; i<qty; i++){
+            col.contains("searchme");
+        }
+ 
+        long time = System.currentTimeMillis() - startStamp;
+ 
+        System.out.println("Took " + time + " ms to perform " + qty + " look-ups using " + col.getClass().getName());
+    }
 }
