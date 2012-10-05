@@ -18,10 +18,15 @@ public class FastArrayListTest extends Thread{
 		tester.toStringTest();
 		
 		array.setFast(true);
+		array.setFast(false);
 		tester.start();
 		array.setFast(true);
-		Thread.sleep(2000);
+		Thread.sleep(1000);
 		array.add("test");
+		
+//		tester.join();
+		
+//		tester.start();
 	}
 
 	protected FastArrayList array;
