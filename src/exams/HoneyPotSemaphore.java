@@ -18,23 +18,23 @@ public class HoneyPotSemaphore {
 	
 	void beeAddsHoney() {
 		try {
-			s0.acquire(0);
+			s0.acquire(0);	// s0.P()
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		// adds honey
 		h ++;
-		s1.release(0);
+		s1.release(0);		// s1.V()
 	}
 	
 	void bearEatsHoney() {
 		try {
-			s1.acquire(H);
+			s1.acquire(H);	// s1.P()
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		// eats honey
 		h = 0;
-		s0.release(H);
+		s0.release(H);		// s0.V()
 	}
 }

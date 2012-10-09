@@ -4,8 +4,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * SP05 Final (diff)
- * FA11 Mid: lock and condition variables
+ * [no sol] SP05 Final (diff)
+ * [no sol] FA11 Mid: lock and condition variables
  * 
  * @author david78k
  *

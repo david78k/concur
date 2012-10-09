@@ -1,18 +1,19 @@
 package exams;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 /**
  * SP05 Mid (any)
- * SP06 Final (Semaphore)
+ * SP06 Final (Semaphore): pass the baton
  * 
  * @author david78k
  *
  */
-public class FooBar {
+public class FooBarSemaphore {
 
 	public static void main(String[] args) {
-		final SubFooBar sfb = new SubFooBar();
+		final SubFooBarSemaphore sfb = new SubFooBarSemaphore();
 		final Random rand = new Random();
 		final int sleepMilliseconds = 1000;
 		
@@ -59,43 +60,56 @@ public class FooBar {
 	}
 }
 
-class SubFooBar extends FooBar {
+class SubFooBarSemaphore extends FooBarSemaphore {
 	private boolean fooExecuting = false;
 	private boolean barExecuting = false;
+	Semaphore e = new Semaphore(1);
+	Semaphore foosem = new Semaphore(0);
+	Semaphore barsem = new Semaphore(0);
+	private int count = 0;
 
 	// balk if bar is executing
-	synchronized boolean foo() {
-		if(barExecuting) return false;
-		
-		// cs
-		fooExecuting = true;
-		boolean result = super.foo();
-		
-		// done
-		fooExecuting = false;
-//		notifyAll();
-		
-		return result;
+	boolean foo() {
+		try {
+			e.acquire();
+			if(barExecuting) return false;
+			
+			// cs
+			fooExecuting = true;
+			boolean result = super.foo();
+			
+			// done
+			fooExecuting = false;
+			barsem.release();
+			
+			e.release();
+			return result;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	// wait if foo is executing
-	synchronized boolean bar() {
-		while (fooExecuting) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return false;
+	boolean bar() {
+		try {
+			e.acquire();
+			if (fooExecuting) {
+				count  ++; e.release(); barsem.acquire();
 			}
+			// cs
+			barExecuting = true;
+			boolean result = super.bar();
+
+			// done
+			barExecuting = false;
+			foosem.release();
+			
+			e.release();
+			return result;
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+			return false;
 		}
-		// cs
-		barExecuting = true;
-		boolean result = super.bar();
-		
-		// done
-		barExecuting = false;
-//		notifyAll();
-		
-		return result;
 	}
 }

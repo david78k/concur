@@ -14,10 +14,6 @@ package exams;
  */
 public class ExchangerSP08<E> {
 
-	public static void main(String[] args) {
-
-	}
-
 	private int state;
 //	private long nfirst; 
 //	private long nsecond; 
@@ -50,3 +46,4 @@ public class ExchangerSP08<E> {
 		return second_slot;
 	}
 }
+
