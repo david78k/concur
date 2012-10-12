@@ -1,0 +1,6 @@
+mpicc, mpi++, mpiCC, mpif77, mpif90
+
+mpicc -o out file
+
+mpirun [--nonlocal] [-np 4] out
+	where -np is the number of processors
