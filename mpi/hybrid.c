@@ -4,7 +4,7 @@
 
 // compute pi using a hybrid MPI/OpenMP
 int main(int argc, char **argv) {
-	int num_steps = 1000;
+	int num_steps = 1000000000;
 	int my_id, numprocs, numthreads, threadlevel;
 	double x, pi, step, sum = 0.0;
 	
