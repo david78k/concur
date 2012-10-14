@@ -1,5 +1,6 @@
 /*
- * usage: a.out msg_size num_shifts
+ * usage: ring msg_size num_shifts
+ * mpirun -np 4 ring 1000 100  
  */
 #include <stdio.h>
 #include <stdlib.h>
