@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
 	MPI_Status status;
 	
-	// handles for non-blocking communcation
+	// handles for non-blocking communication
 	MPI_Request req_recv, req_send;
 
 	MPI_Init(&argc, &argv);
