@@ -2,5 +2,5 @@ mpicc, mpi++, mpiCC, mpif77, mpif90
 
 mpicc -o out file
 
-mpirun [--nonlocal] [-np 4] out
+mpirun [--nolocal] [-np 4] [-machinefile machinefile] out
 	where -np is the number of processors
