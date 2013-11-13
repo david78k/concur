@@ -1,0 +1,6 @@
+mpicc, mpi++, mpiCC, mpif77, mpif90
+
+mpicc -foepnmp -std=c99 -o out file
+
+mpirun [--nolocal] [-np 4] [-machinefile machinefile] out
+	where -np is the number of processors

@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 	// int MPI_Bcast(void *buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm )
 	MPI_Bcast(&numthreads, 1, MPI_INT, 0, MPI_COMM_WORLD);
 	omp_set_num_threads(numthreads);	
-	printf("numthreads = %d\n", numthreads);
+	printf("my_id = %d, numthreads = %d\n", my_id, numthreads);
 
 	#pragma omp parallel for private(x) reduction(+:sum) schedule(static)
 	for (int i = my_id; i < num_steps; i += numprocs) {
